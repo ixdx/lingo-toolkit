@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Translayer</title>
+	<link rel="stylesheet" href="common/styles.css">
+    <link rel="stylesheet" href="translayer/styles.css">	
+</head>
+<body>
+	<div class="sidebar">
+	  <button id="open-text-btn" type="button">Загрузить текст</button>
+	  <span id="text-file-name">Текст не загружен</span>
+	  <button id="open-dictionary-btn" type="button">Загрузить словарь</button>
+	  <span id="dictionary-file-name">Словарь не загружен</span>
+	  <button id="save-dictionary-as-btn" type="button">Сохранить как</button>
+	  <div class="controls">
+		<label>Размер шрифта: <input type="range" id="text-size" min="12" max="100" value="32"></label>
+		<label>Размер подсказок: <input type="range" id="tag-size" min="8" max="32" value="12"></label>
+		<label>Лимит символов на страницу: <input type="range" id="page-size" min="1000" max="5000" value="2000" step="500"></label>
+		<span id="page-limit">2000</span>
+	  </div>
+	  <button id="split-pages-btn" type="button">Разбить на страницы</button>
+	  <label>Показывать слова <input type="checkbox" id="show-word-hint" checked></label>
+	  <label>Показывать фразы <input type="checkbox" id="show-phrase-hint" checked></label>
+	  <div class="ext-links-attributes">
+		<label>Wictionary tag <input type="text" id="wictionary-tag"></label>
+		<label>Source lang <input type="text" id="slang"></label>
+		<label>Target lang <input type="text" id="tlang"></label>
+	  </div>
+	</div>
+
+	
+	
+	<div id="dictionary-panel" class="dictionary-panel">
+	  <button id="toggle-dictionary-btn" class="btn">☰</button>
+	  <div id="dictionary"></div>
+	  <input type="text" id="dictionary-filter">
+	  <textarea id="footnotes" rows="20"></textarea>
+	</div>
+	
+    <form id="edit-form" autocomplete="off">
+		<div class="form-header">
+			<strong id="editTitle">Добавить в словарь</strong>
+			<span id="extLinks"></span>
+		</div>
+		<small id="edit-target"></small>
+		<input type="text" id="editValue" placeholder="Введите перевод...">
+		<div class="button-group">
+			<button type="submit">ОК</button>
+			<button id="edit-form-cancel-btn" type="button">Отмена</button>
+		</div>
+	</form>
+
+	<div class="central-panel">
+		<div id="result"></div>
+		<div class="navigate-panel">
+			<div class="navigate-buttons">
+				<button id="first-btn" class="navigate-button"><<</button>
+				<button id="prev-btn" class="navigate-button"><</button>
+				<input type="number" class="navigate-button" id="num-page" min="1" max="1" value="1"/>
+				<button id="next-btn" class="navigate-button">></button>
+				<button id="last-btn" class="navigate-button">>></button>
+			</div>
+		</div>
+	</div>
+	<script src="common/functions.js"></script>
+	<script src="common/openfile.js"></script>
+	<script src="translayer/functions.js"></script>
+    <script src="translayer/translayer.js"></script>
+	<script src="translayer/events.js"></script>
+
+</body>
+</html>
