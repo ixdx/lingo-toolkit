@@ -6,6 +6,8 @@ addEvent('open-text-btn', 'click', openText);
 addEvent('open-dictionary-btn', 'click', openDictionary);
 addEvent('save-dictionary-as-btn', 'click', saveDictionaryAs);
 addEvent('split-pages-btn', 'click', splitPages);
+addEvent('save-book-state', 'click', saveBookState);
+addEvent('options-reset', 'click', optionsReset);
 
 // переключатель страниц
 addEvent('first-btn', 'click', firstPage);

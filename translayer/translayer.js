@@ -9,8 +9,9 @@ const root = document.documentElement;
 let currentTargetStr = "";
 let text = "";
 let maxPageCharacters = 2000;
-let pages = []
+let pages = [];
 let currentPage = 0;
+let bookName = "";
 
 
 // Ссылки на внешние источники, чтобы можно было поглядеть дополнительную информацию по переводимому слову
@@ -116,20 +117,27 @@ function closeEdit() {
 document.getElementById('page-size').addEventListener('input', (e) => {
 	let pageLimit = document.getElementById('page-limit');
 	pageLimit.innerHTML = e.target.value;
-    maxPageCharacters = e.target.value;
 });
 
 
 async function openText() {
 	[text, fileName] = await openTXT();
-	pages = splitTextIntoPages(text, maxPageCharacters);
-	setPageInput()
-	setPage(0);
 	updateFileName('text-file-name', fileName);
+	bookName = fileName;
+	const bookState = localStorage.getItem(bookName);
+	if (bookState) {
+		loadBookState()
+	} else {
+		maxPageCharacters = document.getElementById('page-size').value;
+		pages = splitTextIntoPages(text, maxPageCharacters);
+		setPageInput()
+		setPage(0);
+	}
 	render();
 }
 
 function splitPages(){
+	maxPageCharacters = document.getElementById('page-size').value;
 	pages = splitTextIntoPages(text, maxPageCharacters);
 	setPageInput()
 	setPage(0);
@@ -259,6 +267,52 @@ const btn = document.getElementById('toggle-dictionary-btn');
 btn.addEventListener('click', () => {
   panel.classList.toggle('open');
 });
+
+function saveBookState() {
+	bookState = {
+		'maxPageCharacters': maxPageCharacters,
+		'page': currentPage,
+		'text-size': document.getElementById('text-size').value,
+		'tag-size': document.getElementById('tag-size').value,
+		'show-word-hint': document.getElementById('show-word-hint').checked,
+		'show-phrase-hint': document.getElementById('show-phrase-hint').checked
+	};
+	localStorage.setItem(bookName, JSON.stringify(bookState));
+}
+
+function loadBookState() {
+	const bookState = JSON.parse(localStorage.getItem(bookName));
+	document.getElementById('page-size').value = bookState['maxPageCharacters'];
+	document.getElementById('page-limit').innerHTML = bookState['maxPageCharacters'];
+	document.getElementById('text-size').value = bookState['text-size'];
+	updateVar('text-size', bookState['text-size'], 'px');
+	document.getElementById('tag-size').value = bookState['tag-size'];
+	updateVar('tag-size', bookState['tag-size'], 'px');
+	document.getElementById('show-word-hint').checked = bookState['show-word-hint'];
+	updateVar('hint-word-display', bookState['show-word-hint'] ? 'block' : 'none', '');
+	document.getElementById('show-phrase-hint').checked = bookState['show-phrase-hint'];
+	updateVar('hint-phrase-display', bookState['show-phrase-hint'] ? 'block' : 'none', '');
+	pages = splitTextIntoPages(text, bookState['maxPageCharacters']);
+	setPageInput()
+	setPage(bookState['page']);
+}
+
+function optionsReset(){
+	const bookState = JSON.parse(localStorage.getItem(bookName));
+	document.getElementById('page-size').value = 2000;
+	document.getElementById('page-limit').innerHTML = 2000;
+	document.getElementById('text-size').value = 32;
+	updateVar('text-size', 32, 'px');
+	document.getElementById('tag-size').value = 12;
+	updateVar('tag-size', 12, 'px');
+	document.getElementById('show-word-hint').checked = true;
+	updateVar('hint-word-display', 'block', '');
+	document.getElementById('show-phrase-hint').checked = true;
+	updateVar('hint-phrase-display', 'block', '');
+	pages = splitTextIntoPages(text, 2000);
+	setPageInput()
+	setPage(0);
+}
 
 function render() {
 	//document.getElementById('result').innerHTML = wrapText(pages[currentPage], dictionary);  
